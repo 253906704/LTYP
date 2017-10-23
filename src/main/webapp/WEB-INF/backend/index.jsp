@@ -14,7 +14,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>LETU影评后台管理首页</title>
+    <title>乐途后台管理首页</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -25,17 +25,86 @@
     <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
     <link rel="stylesheet" href="${ctx}/staticfile/assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="${ctx}/staticfile/assets/css/admin.css">
-    <script src="${ctx}/staticfile/js/jquery-1.4.2.js"></script>
-    <script src="${ctx}/staticfile/js/echarts.js"></script>
-    <script src="${ctx}/staticfile/js/showChart.js"></script>
+    <%--<script src="${ctx}/staticfile/assets/js/jquery.min.js"></script>--%>
     <script src="${ctx}/staticfile/assets/js/app.js"></script>
 
+    <script src="${ctx}/staticfile/js/jquery-1.9.1.min.js"></script>
+    <script src="${ctx}/staticfile/js/echarts.js"></script>
+
+    <script src="${ctx}/staticfile/js/theme.js"></script>
+
+
+    <script>
+        var chartOutChar = null;
+
+        var option1 = {
+            title: {
+
+                text: "2017电影不同电影类型的票房",
+
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                x: 'center',
+                y: 'bottom',
+                data: ['剧情', '战争', '动画', '爱情', '科幻', '动作', '犯罪', '恐怖', '励志']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            calculable: true,
+            series: [
+
+                {
+                    name: '面积模式',
+                    type: 'pie',
+                    radius: [30, 110],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    data: [
+                        <c:forEach items="${map}" var="m">
+                            {value: ${m.value}, name: '${m.key}'},
+
+                        </c:forEach>
+                    ]
+                }
+            ]
+        };
+
+
+        //载入图表
+        $(function () {
+            chartOutChar = echarts.init(document.getElementById('showChart'));
+            chartOutChar.setOption(option1);
+
+        });
+    </script>
 
 </head>
 
 
+<!--[if lte IE 9]><p class="browsehappy">升级你的浏览器吧！ <a href="http://se.360.cn/" target="_blank">升级浏览器</a>以获得更好的体验！</p>
+<![endif]-->
+</head>
+
 <body>
+
 <jsp:include page="backheader.jsp"/>
+
 
 <div class="am-cf admin-main">
 
@@ -44,30 +113,6 @@
         <div class=" admin-content">
 
             <div class="daohang">
-                <ul>
-                    <li>
-                        <button type="button" class="am-btn am-btn-default am-radius am-btn-xs"/>
-                        首页
-                    </li>
-                    <li>
-                        <button type="button" class="am-btn am-btn-default am-radius am-btn-xs">帮助中心<a
-                                href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close="">×</a>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="am-btn am-btn-default am-radius am-btn-xs">奖金管理<a
-                                href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close="">×</a>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="am-btn am-btn-default am-radius am-btn-xs">产品管理<a
-                                href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close="">×</a>
-                        </button>
-                    </li>
-
-
-                </ul>
-
 
             </div>
 
@@ -77,17 +122,17 @@
 
                 <div class="admin-index">
                     <dl data-am-scrollspy="{animation: 'slide-right', delay: 100}">
-                        <dt class="qs"><i class="am-icon-tags"></i></dt>
+                        <dt class="qs"><i class="am-icon-users"></i></dt>
                         <dd>${movieNum}</dd>
                         <dd class="f12">电影数量</dd>
                     </dl>
                     <dl data-am-scrollspy="{animation: 'slide-right', delay: 300}">
-                        <dt class="cs"><i class="am-icon-users"></i></dt>
+                        <dt class="cs"><i class="am-icon-area-chart"></i></dt>
                         <dd>${userNum}</dd>
                         <dd class="f12">用户人数</dd>
                     </dl>
                     <dl data-am-scrollspy="{animation: 'slide-right', delay: 600}">
-                        <dt class="hs"><i class="am-icon-film"></i></dt>
+                        <dt class="hs"><i class="am-icon-shopping-cart"></i></dt>
                         <dd>${movieTypeNum}</dd>
                         <dd class="f12">电影分类</dd>
                     </dl>
@@ -95,126 +140,14 @@
                 <div class="admin-biaoge">
                     <div class="xinxitj">今日热评</div>
 
+                    <div class="row" style="margin-top: 100px">
+                         <div id="showChart" style="width: 100%; height: 400px; margin-left: 0px;
+                             margin-right: 6px; margin-bottom: 8px; float: left; overflow: hidden;">
 
-                    <div class="row" style="margin-top: 50px">
-                        <div id="showChart"
-                             style="width: 100%; height: 500px; margin-left: 0px; margin-right: 6px; margin-bottom: 8px; float: left; overflow: hidden;"></div>
+                         </div>
+                     </div>
 
-                    </div>
-
-
-                    <div id="main" style="width: 100%;height:400px;"></div>
-
-                    <script type="text/javascript">
-                        var titleData = [];
-                        var subtextData = [];
-                        var legendData = [];
-                        var xAxisDate = [];
-                        var seriesData1 = [];
-                        var seriesData2 = [];
-                        $(document).ready(function () {
-                            var myChart = echarts.init(document.getElementById('main'));
-// 指定图表的配置项和数据
-                            var option = {
-                                title: {
-                                    // text: '2017年10月21日内地日票房分析',
-
-                                    text: titleData,
-
-                                    // subtext: "数据来源：爬取时光网",
-
-                                    subtext: subtextData,
-
-                                    x: 'center'
-                                },
-                                toolbox: {
-                                    feature: {
-                                        dataView: {show: true, readOnly: false},
-                                        magicType: {show: true, type: ['line', 'bar']},
-                                        restore: {show: true},
-                                        saveAsImage: {show: true}
-                                    }
-                                },
-                                tooltip: {
-                                    trigger: 'axis',
-                                    axisPointer: {
-                                        type: 'line'
-                                    }
-                                },
-                                legend: {
-                                    left: 'left',
-                                    data: ['累计票房(元)', '日票房(元)']
-                                },
-                                xAxis: {
-
-                                    data: xAxisDate,
-                                    min: 'dataMin',
-                                    max: 'dataMax'
-                                },
-                                yAxis: {},
-                                series: [{
-                                    name: '日票房(亿)',
-                                    type: 'bar',
-                                    data: seriesData1,
-                                    itemStyle: {
-                                        normal: {
-                                            color: '#81b6b2',
-                                            lineStyle: {
-                                                color: '#81b6b2'
-                                            }
-                                        }
-                                    }
-                                }, {
-                                    name: '累计票房(亿)',
-                                    type: 'line',
-                                    data: seriesData2,
-                                    itemStyle: {
-                                        normal: {
-                                            color: '#e44f2f',
-                                            lineStyle: {
-                                                color: '#e44f2f'
-                                            }
-                                        }
-                                    }
-                                }]
-                            };
-                            // 使用刚指定的配置项和数据显示图表。
-
-                            myChart.setOption(option);
-                        });
-
-                        $.ajax({
-                            type: "get",
-                            url: "/backend/getEcherts",
-                            contentType: "application/json;charset=utf-8",
-                            dataType: "json",
-                            async: false,
-
-                            success: function (Eachartdata) {
-
-                                //主题
-                                titleData = Eachartdata.titleData;
-                                subtextData = Eachartdata.subtextData;
-                                legendData = Eachartdata.legendData;
-                                xAxisDate = Eachartdata.xAxisDate;
-                                seriesData1 = Eachartdata.seriesData1;
-                                seriesData2 = Eachartdata.seriesData2;
-
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                /*弹出jqXHR对象的信息*/
-                                alert(jqXHR.responseText);
-                                alert(jqXHR.status);
-                                alert(jqXHR.readyState);
-                                alert(jqXHR.statusText);
-                                /*弹出其他两个参数的信息*/
-                                alert(textStatus);
-                                alert(errorThrown);
-                            }
-                        });
-
-
-                    </script>
+                    <div id="main" style="width: 100%;height:300px;"></div>
 
                 </div>
                 <div class="shuju">
@@ -242,7 +175,7 @@
                         <div class="hd">
                             <ul>
                                 <li>其他信息</li>
-                                <li>今日工作安排</li>
+                                <li>工作进度表</li>
                             </ul>
                         </div>
                         <div class="bd">
@@ -260,30 +193,30 @@
                                         <td align="center"><a href="#">10%</a></td>
                                     </tr>
                                     <tr>
-                                        <td align="center">2</td>
+                                        <td align="center">1</td>
                                         <td>工作进度名称</td>
                                         <td align="center"><a href="#">10%</a></td>
                                     </tr>
                                     <tr>
-                                        <td align="center">3</td>
-                                        <td>工作进度名称</td>
-                                        <td align="center"><a href="#">10%</a></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td align="center">4</td>
+                                        <td align="center">1</td>
                                         <td>工作进度名称</td>
                                         <td align="center"><a href="#">10%</a></td>
                                     </tr>
 
                                     <tr>
-                                        <td align="center">5</td>
+                                        <td align="center">1</td>
                                         <td>工作进度名称</td>
                                         <td align="center"><a href="#">10%</a></td>
                                     </tr>
 
                                     <tr>
-                                        <td align="center">6</td>
+                                        <td align="center">1</td>
+                                        <td>工作进度名称</td>
+                                        <td align="center"><a href="#">10%</a></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center">1</td>
                                         <td>工作进度名称</td>
                                         <td align="center"><a href="#">10%</a></td>
                                     </tr>
@@ -335,18 +268,11 @@
                             </ul>
                         </div>
                     </div>
-                    <%--<script type="text/javascript">jQuery(".slideTxtBox").slide();</script>--%>
+                    <script type="text/javascript">jQuery(".slideTxtBox").slide();</script>
 
 
                 </div>
-
-                <div class="foods">
-                    <ul>版权所有@2015 .模板收集自 <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - More
-                        Templates<a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></ul>
-                    <dl><a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a></dl>
-
-
-                </div>
+                <jsp:include page="backfoot.jsp"/>
 
 
             </div>
@@ -354,9 +280,7 @@
         </div>
 
 
-    </div>
-
-<jsp:include page="backfoot.jsp"/>
+</div>
 
 
 </body>

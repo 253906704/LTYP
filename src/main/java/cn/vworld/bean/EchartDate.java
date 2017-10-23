@@ -1,6 +1,7 @@
 package cn.vworld.bean;
 
 public class EchartDate {
+
     private String MovieName;
     private String Allboxoffice;
     private String Dayboxoffice;
@@ -60,3 +61,4 @@ public class EchartDate {
                 '}';
     }
 }
+

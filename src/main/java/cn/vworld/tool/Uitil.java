@@ -1,5 +1,6 @@
 package cn.vworld.tool;
 
+
 public class Uitil {
     public static String SlipString(String data) {
         char s = data.charAt(data.length() - 1);
@@ -14,3 +15,6 @@ public class Uitil {
         return data;
     }
 }
+
+
+
