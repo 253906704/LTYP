@@ -6,7 +6,6 @@ import cn.vworld.service.UserInfoService;
 import cn.vworld.service.UserService;
 
 import cn.vworld.tool.Md5HashPassword;
-import com.sun.deploy.net.HttpResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -135,6 +134,10 @@ public class LoginController {
     //注册操作
     @RequestMapping("/regist")
     public String saveUser(User user, UserInfo userInfo, Model model, HttpSession session) {
+        User user_exist = userService.findUserByEmail(userInfo.getEmail());
+        if (user_exist != null) {
+            return "/login/sign-up";
+        }
         userService.saveUser(user,userInfo);
         User userSendMail = userService.findUserByEmail(userInfo.getEmail());
         session.setAttribute("userSendMail", userSendMail);

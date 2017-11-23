@@ -271,7 +271,7 @@ public class UserController {
     }
 
     //下载用户表数据
-    @RequestMapping("backend/downLoadUserList")
+    @RequestMapping("/backend/downLoadUserList")
     public void downLoadUserList( HttpServletResponse response,String tableType) throws IOException {
         HashMap<String,String> map=new HashMap<String,String>();
         map.put("tableType",tableType);
